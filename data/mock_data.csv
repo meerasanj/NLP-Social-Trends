@@ -1,0 +1,6 @@
+text,sentiment,platform,hashtags,country,retweets,likes,timestamp
+"I absolutely love the new AI features! It makes life so much easier.",Positive,Twitter,#AI #Tech,USA,15,120,2023-11-17 10:00:00
+"This update is terrible. The app keeps crashing.",Negative,Facebook,#Bugs #Annoying,UK,2,5,2023-11-17 11:30:00
+"Just had a coffee. It was okay. Nothing special.",Neutral,Instagram,#Coffee #Morning,Canada,0,45,2023-11-18 08:15:00
+"Does anyone know when the event starts?",Neutral,Twitter,#Question #Event,Australia,5,12,2023-11-18 09:00:00
+"Worst customer service experience ever. Never buying again.",Negative,Twitter,#CustomerService #Fail,USA,120,500,2023-11-18 12:45:00
