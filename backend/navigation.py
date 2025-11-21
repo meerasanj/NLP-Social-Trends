@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-# (1-707 posts from the dataset)
+# (1-732 posts from the dataset)
 MAX_POST_INDEX = 732
 MIN_POST_INDEX = 1
 
@@ -80,4 +80,5 @@ if __name__ == "__main__":
     # 4. Test Invalid Select
     current_index_before_invalid = nav.get_current_index()
     nav.select_post(0)
+
     print(f"Index after Invalid Select (0): {nav.get_current_index()} (should be {current_index_before_invalid})")
