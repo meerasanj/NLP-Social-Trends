@@ -27,7 +27,7 @@ pipe = pipeline(
 # In[2]:
 
 
-filePath = "/home/james/NLP-Social-Trends/data/mock_data.csv"
+filePath = "../data/raw_kaggle.csv"
 
 rows = []
 with open(filePath, newline='') as csvfile:
@@ -63,7 +63,6 @@ Output:"""
 
 response = pipe(prompt, max_new_tokens=200, temperature=0.3, do_sample=False, return_full_text=False)
 output = response[0]["generated_text"]
-print(output)
 
 
 # In[5]:
