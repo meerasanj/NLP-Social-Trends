@@ -1,8 +1,19 @@
 # main_gui.py
+import sys
+import os
+
+# Add parent directory to path to import backend modules
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from layout_components import build_layout
 import display_logic
+from backend.data_loader import DataLoader
 
 def main():
+    # Load data
+    loader = DataLoader('mock_data.csv')
+    print("Data Loaded")
+    
     # Create the GUI (returns the root window and frames dict)
     root, frames = build_layout(window_title="Omar GUI", geometry="900x600")
 
