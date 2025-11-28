@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-# (1-707 posts from the dataset)
-MAX_POST_INDEX = 707
+# (1-732 posts from the dataset)
+MAX_POST_INDEX = 732
 MIN_POST_INDEX = 1
 
 @dataclass
@@ -20,7 +20,7 @@ class Navigator:
     def next_post(self) -> int:
         """
         Implements next_post() logic  with wrap-around. 
-        If at 707, it loops back to 1. Otherwise, it increments.
+        If at 732, it loops back to 1. Otherwise, it increments.
         """
         if self.current_index == MAX_POST_INDEX:
             self.current_index = MIN_POST_INDEX  # Loop to 1
@@ -31,17 +31,17 @@ class Navigator:
     def prev_post(self) -> int:
         """
         Implements prev_post() logic with wrap-around. 
-        If at 1, it loops back to 707. Otherwise, it decrements.
+        If at 1, it loops back to 732. Otherwise, it decrements.
         """
         if self.current_index == MIN_POST_INDEX:
-            self.current_index = MAX_POST_INDEX  # Loop to 707
+            self.current_index = MAX_POST_INDEX  # Loop to 732
         else:
             self.current_index -= 1
         return self.current_index
 
     def select_post(self, new_index: int) -> int:
         """
-        Implements select_post logic. Jumps to an index if it's within 1-707.
+        Implements select_post logic. Jumps to an index if it's within 1-732.
         """
         if MIN_POST_INDEX <= new_index <= MAX_POST_INDEX:
             self.current_index = new_index
@@ -60,17 +60,17 @@ if __name__ == "__main__":
     
     nav = Navigator()
     
-    # 1. Test Wrap-Around Forward (707 -> 1)
+    # 1. Test Wrap-Around Forward (732 -> 1)
     nav.select_post(MAX_POST_INDEX)
-    print(f"Index before Next (at 707): {nav.get_current_index()}")
+    print(f"Index before Next (at 732): {nav.get_current_index()}")
     nav.next_post()
     print(f"Index after Next (Loop to 1): {nav.get_current_index()}")
     
-    # 2. Test Wrap-Around Backward (1 -> 707)
+    # 2. Test Wrap-Around Backward (1 -> 732)
     nav.select_post(MIN_POST_INDEX)
     print(f"Index before Prev (at 1): {nav.get_current_index()}")
     nav.prev_post()
-    print(f"Index after Prev (Loop to 707): {nav.get_current_index()}")
+    print(f"Index after Prev (Loop to 732): {nav.get_current_index()}")
 
     # 3. Test Normal Navigation (10 -> 11)
     nav.select_post(10)

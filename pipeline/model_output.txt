@@ -1,6 +1,0 @@
- 
-Post Number: 1, Sentiment: Positive, Location: USA, Platform: Twitter, Likes: 120, Retweets: 500
-Post Number: 2, Sentiment: Negative, Location: UK, Platform: Facebook, Likes: 5, Retweets: 2
-Post Number: 3, Sentiment: Neutral, Location: Canada, Platform: Instagram, Likes: 45, Retweets: 0
-Post Number: 4, Sentiment: Neutral, Location: Australia, Platform: Twitter, Likes: 12, Retweets: 5
-Post Number: 5, Sentiment: Negative, Location: USA, Platform: Twitter, Likes: 500, Retweets: 120
