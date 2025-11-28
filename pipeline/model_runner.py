@@ -111,7 +111,7 @@ Output: Post Number: {i}, Sentiment: {sentiment}, Location: {country}, Platform:
 # In[5]:
 
 
-with open("LLM_data.csv", "w", newline='') as csvfile:
+with open("../data/LLM_data.csv", "w", newline='') as csvfile:
     fieldnames = ['Post_Number', 'Sentiment', 'Location', 'Platform', 'Likes', 'Retweets']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
