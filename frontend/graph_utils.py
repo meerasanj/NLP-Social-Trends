@@ -3,14 +3,16 @@ import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
+#First Part is Test for how matplotlib works
+
 #Load data for use
 df = pd.read_csv('../data/LLM_data.csv')
 
 #Set Up Scatter plot
-fig, ax = plt.subplots()
+figTest, axTest = plt.subplots()
 x = df['Post_Number']
 y = df['Likes']
-ax.scatter(x,y, color = "darkorange")
+axTest.scatter(x,y, color = "darkorange")
 
 #Set Up Graph Environment
 plt.xlabel('Post Number')
@@ -21,4 +23,12 @@ plt.grid(True)
 #Show Graph
 plt.show()
 
-
+#Logic that will be used in the main gui
+def scatter_plot(xIn, yIn):
+    fig, ax =plt.subplots()
+    ax.scatter(xIn,yIn, color = "darkorange")
+    plt.xlabel('Post Number')
+    plt.ylabel('Likes')
+    plt.title('Post Summary')
+    plt.grid(True)
+    return fig
