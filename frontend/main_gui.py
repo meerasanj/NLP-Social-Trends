@@ -9,6 +9,7 @@ from layout_components import build_layout
 import display_logic
 from backend.navigation import Navigator
 from backend.data_loader import DataLoader
+from graph_utils import scatter_plot
 
 """
 ================================================================================
@@ -112,6 +113,9 @@ def main():
     except AttributeError:
         # if your display_logic only has button callbacks that's fine
         pass
+
+    #Show Graph Immediately
+    display_logic.update_middle(frames, None)
 
     # Start the GUI
     root.mainloop()
