@@ -9,73 +9,21 @@ from layout_components import build_layout
 import display_logic
 from backend.navigation import Navigator
 from backend.data_loader import DataLoader
-from graph_utils import scatter_plot
 
 """
 ================================================================================
-DATA MAPPING GUIDE FOR OMAR
+DATA MAPPING GUIDE FOR OMAR (implemented)
 ================================================================================
 
-SETUP COMPLETE:
----------------
-✓ Imports are already added
-✓ Navigator and DataLoader instances are created in main()
-
-WHAT YOU NEED TO DO:
--------------------
-1. In on_next_pressed() function:
-   - Get the next index
-   - Get post data
-   - Update all labels with the post data (see mapping below)
-
-2. Initialize first post on startup:
-   - After creating the GUI, load the first post and display it
-
-EXAMPLE OUTPUT OF get_post_by_index(0):
-----------------------------------------
-{
-  "Post_Number": 1,
-  "text": "Enjoying a beautiful day at the park!",
-  "Sentiment": "Positive",
-  "Location": "USA",
-  "Platform": "Twitter",
-  "Likes": 30,
-  "Retweets": 15
-}
-
-DATAFRAME FIELD → GUI WIDGET MAPPING:
---------------------------------------
-Access widgets via: frames["labels"]["widget_name"]
-
-Post_Number Example: frames["labels"]["middle"].config(text=f"Post #{post_data['Post_Number']}")
-
-text → frames["labels"]["description"] (or "middle" if you want to show the post text)
-  Example: frames["labels"]["description"].config(text=post_data['text'])
-
-Location → frames["labels"]["geography"]
-  Example: frames["labels"]["geography"].config(text=f"Location: {post_data['Location']}")
-
-Platform → frames["labels"]["description"] (combine with other info)
-  Example: frames["labels"]["description"].config(
-      text=f"Platform: {post_data['Platform']}\\nLikes: {post_data['Likes']}\\nRetweets: {post_data['Retweets']}"
-  )
-
-Sentiment → frames["labels"]["sentiment"]
-  Example: frames["labels"]["sentiment"].config(text=f"Sentiment: {post_data['Sentiment']}")
-
-Likes → frames["labels"]["description"] (combine with Platform/Retweets)
-  Example: See Platform example above
-
-Retweets → frames["labels"]["description"] (combine with Platform/Likes)
-  Example: See Platform example above
-
-RECOMMENDED MAPPING:
---------------------
-- geography label → Location
-- description label → Platform, Likes, Retweets (multi-line)
-- sentiment label → Sentiment
-- middle label → Post_Number or text
-- filter label → Not for data display (for filter controls)
+Notes implemented in this file:
+- Navigator is 1-based (1..732). DataLoader.get_post_by_index expects 0-based.
+  We convert by doing: idx0 = nav.get_current_index() - 1
+- on_next_pressed, on_back_pressed, on_select_post implemented to:
+    * advance/retreat/select index via Navigator
+    * request post dict from DataLoader (0-based index)
+    * call display_logic.update_geography/update_description/update_sentiment
+- The GUI initializes by loading the first post if available.
+- Buttons from layout_components frames["buttons"] are wired to the handlers.
 """
 
 def main():
@@ -87,35 +35,88 @@ def main():
     # Create the GUI (returns the root window and frames dict)
     root, frames = build_layout(window_title="Omar GUI", geometry="900x600")
 
+    def _display_post_dict(post_dict):
+        """Helper: given a post dict (or None), update the three main panels."""
+        if not post_dict:
+            print("[main_gui] No post data to display.")
+            return
+        # Geography: accept either a string or dict key
+        display_logic.update_geography(frames, post_dict.get('Location', post_dict.get('Location', 'Unknown')))
+        # Description panel: pass the whole dict (display_logic will extract platform/likes/etc)
+        display_logic.update_description(frames, post_dict)
+        # Sentiment:
+        display_logic.update_sentiment(frames, post_dict.get('Sentiment', 'Unknown'))
+        # Optional: update middle text if you want to show post number or text there
+        try:
+            middle_text = f"Post #{post_dict.get('Post_Number', 'N/A')}"
+            display_logic.update_middle(frames, middle_text)
+        except Exception:
+            # keep existing middle behavior if not desired
+            pass
+
     def on_back_pressed():
         print("Back button pressed")
-        
-        pass
+        new_index = nav.prev_post()
+        idx0 = new_index - 1
+        post = loader.get_post_by_index(idx0)
+        if post:
+            _display_post_dict(post)
+        else:
+            print("[main_gui] No post at index", idx0)
 
     def on_select_post():
         print("Select button pressed")
-        
-        pass
+        try:
+            import tkinter.simpledialog as simpledialog
+            # Ask user for post number (1-based)
+            answer = simpledialog.askinteger("Select Post", "Enter post number (1 - 732):", minvalue=1, maxvalue=9999)
+            if answer is None:
+                return
+            nav.select_post(answer)
+            idx0 = nav.get_current_index() - 1
+            post = loader.get_post_by_index(idx0)
+            if post:
+                _display_post_dict(post)
+            else:
+                print(f"[main_gui] Post #{answer} not found")
+        except Exception as e:
+            print("[main_gui] Error in select dialog:", e)
 
     def on_next_pressed():
         print("Next button pressed")
-    
-        pass
+        new_index = nav.next_post()
+        idx0 = new_index - 1
+        post = loader.get_post_by_index(idx0)
+        if post:
+            _display_post_dict(post)
+        else:
+            print("[main_gui] No post at index", idx0)
 
-    # Wire the bottom buttons to the display_logic stubs
-    frames["buttons"]["back"].config(command=on_back_pressed)
-    frames["buttons"]["select"].config(command=on_select_post)
-    frames["buttons"]["next"].config(command=on_next_pressed)
+    # Wire the bottom buttons to the display_logic stubs if layout provides them
+    try:
+        frames["buttons"]["back"].config(command=on_back_pressed)
+        frames["buttons"]["select"].config(command=on_select_post)
+        frames["buttons"]["next"].config(command=on_next_pressed)
+    except Exception as e:
+        print("[main_gui] Warning: could not wire buttons automatically:", e)
 
     # (Optional) initialize some placeholder text via display_logic functions
     try:
-        display_logic.update_geography(frames, "USA")
-    except AttributeError:
-        # if your display_logic only has button callbacks that's fine
-        pass
+        # Initialize first post display on startup
+        first_idx0 = nav.get_current_index() - 1
+        first_post = loader.get_post_by_index(first_idx0)
+        if first_post:
+            _display_post_dict(first_post)
+        else:
+            print("[main_gui] No data available to initialize first post.")
+    except Exception as e:
+        print("[main_gui] Error initializing first post:", e)
 
-    #Show Graph Immediately
-    display_logic.update_middle(frames, None)
+    # Show Graph Immediately (display_logic.update_middle will render scatter if None passed)
+    try:
+        display_logic.update_middle(frames, None)
+    except Exception:
+        pass
 
     # Start the GUI
     root.mainloop()
