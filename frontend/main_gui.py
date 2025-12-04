@@ -29,7 +29,7 @@ Notes implemented in this file:
 def main():
     # Initialize navigation and data loading
     nav = Navigator()  # Manages current post index (1-based: 1-732)
-    loader = DataLoader('LLM_data.csv')  # Loads the CSV data
+    loader = DataLoader('LLM_data_final.csv')  # Loads the CSV data
     print("Data Loaded")
     
     # Create the GUI (returns the root window and frames dict)
