@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from layout_components import build_layout
 import display_logic
+import graph_utils
 from backend.navigation import Navigator
 from backend.data_loader import DataLoader
 
@@ -92,11 +93,30 @@ def main():
         else:
             print("[main_gui] No post at index", idx0)
 
+    def sxlButton():
+        display_logic.update_middle(frames, graph_utils.sentByLikes)
+
+    def sxpnButton(): 
+        display_logic.update_middle(frames, graph_utils.sentByPostNum)
+
+    def pxlButton():
+        display_logic.update_middle(frames, graph_utils.platformByLikes)
+
+    def baseButton():
+        display_logic.update_middle(frames, graph_utils.postnumByLoc)
+
+
     # Wire the bottom buttons to the display_logic stubs if layout provides them
     try:
         frames["buttons"]["back"].config(command=on_back_pressed)
         frames["buttons"]["select"].config(command=on_select_post)
         frames["buttons"]["next"].config(command=on_next_pressed)
+
+        #Vertical Buttons
+        frames["filter_buttons"]["btn1"].config(command=sxlButton)
+        frames["filter_buttons"]["btn2"].config(command=sxpnButton)
+        frames["filter_buttons"]["btn3"].config(command=pxlButton)
+        frames["filter_buttons"]["btn4"].config(command=baseButton)
     except Exception as e:
         print("[main_gui] Warning: could not wire buttons automatically:", e)
 
@@ -114,7 +134,7 @@ def main():
 
     # Show Graph Immediately (display_logic.update_middle will render scatter if None passed)
     try:
-        display_logic.update_middle(frames, None)
+        display_logic.update_middle(frames, graph_utils.postnumByLoc)
     except Exception:
         pass
 
