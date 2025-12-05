@@ -27,15 +27,15 @@ from matplotlib.figure import Figure
 #Logic that will be used in the main gui
 def scatter_plot():
     df = pd.read_csv('../data/LLM_data_final.csv')
-    xIn = df['Post_Number']
-    yIn = df['Sentiment']
+    xIn = df['Sentiment']
+    yIn = df['Likes']
 
     fig = Figure(figsize=(5,4), dpi=80)
     ax = fig.add_subplot(111)
 
     ax.scatter(xIn,yIn, color = "darkorange")
-    ax.set_xlabel('Post Number ')
-    ax.set_ylabel('Sentiment')
+    ax.set_xlabel('Sentiment ')
+    ax.set_ylabel('Likes')
     ax.set_title('Post Summary')
     ax.grid(True)
 
