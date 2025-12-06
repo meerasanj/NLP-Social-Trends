@@ -1,6 +1,6 @@
 # display_logic.py
 import tkinter as tk
-from graph_utils import scatter_plot
+import graph_utils
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 canvas_widget = None
@@ -63,7 +63,7 @@ def update_description(frames, platform_or_post, count_text=None):
     except Exception as e:
         print("[display_logic.update_description] Error:", e)
 
-def update_middle(frames, text):
+def update_middle(frames, content):
     """
     Center panel: if text provided, show it; otherwise render the scatter_plot figure.
     """
@@ -71,17 +71,18 @@ def update_middle(frames, text):
     try:
         middle_frame = frames["middleTopFrame"]
         clear_frame(middle_frame)
-
-        if text:
-            lbl = tk.Label(middle_frame, text=text, anchor="nw", justify="left")
-            lbl.pack(fill="both", expand=True, padx=10, pady=10)
-            frames["labels"]["middle"] = lbl
-        else:
-            fig = scatter_plot()
+        
+        if callable(content):
+            fig = content()
             canvas = FigureCanvasTkAgg(fig, master=middle_frame)
             canvas_widget = canvas.get_tk_widget()
             canvas_widget.pack(fill="both", expand=True)
             canvas.draw()
+
+        else:
+            lbl = tk.Label(middle_frame, text=str(content), bg=middle_frame.cget("bg"), font=("Arial",16))
+            lbl.pack(expand=True)
+
     except Exception as e:
         print("[display_logic.update_middle] Error:", e)
 

@@ -48,6 +48,23 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     filterFrame = tk.Frame(rightTopFrame, bg="orange")
     filterFrame.pack(side="top", fill="both", expand=True)
 
+    filter_label = tk.Label(filterFrame, text="Graph Filters", bg="orange")
+    filter_label.pack(side="top", pady=5)
+
+    filter_btns = {}
+
+    btn_labels = ["Sentiment by Likes", "Sentiment by Post Number", " Platform by Likes", "Return to Base Graph"]
+
+    for i, label_text in enumerate(btn_labels):
+        # Create the button
+        btn = tk.Button(filterFrame, text=label_text)
+        
+        # side="top" stacks them vertically. fill="x" makes them stretch horizontally.
+        btn.pack(side="top", fill="x", padx=10, pady=5)
+        
+        # Save to our dict with keys like "btn1", "btn2", etc.
+        filter_btns[f"btn{i+1}"] = btn
+
     # Add simple placeholder labels so areas are visible when imported
     def _add_label(frame, text):
         lbl = tk.Label(frame, text=text, bg=frame.cget("bg"))
@@ -88,13 +105,14 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
             "description": desc_label,
             "middle": middle_label,
             "sentiment": sentiment_label,
-            "filter": filter_label
+            #"filter": filter_label
         },
         "buttons": {
             "back": btn_back,
             "select": btn_select,
             "next": btn_next
-        }
+        },
+        "filter_buttons": filter_btns
     }
 
     return mainWindow, frames
