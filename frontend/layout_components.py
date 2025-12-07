@@ -12,6 +12,10 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     mainWindow.title("Placeholder Title")
     mainWindow.geometry("750x500")
 
+    # Add 'icon' to app
+    icon = tk.PhotoImage(file='img/app-icon.gif')
+    mainWindow.iconphoto(True, icon)
+
     # Bottom frame for the index buttons
     bottomFrame = tk.Frame(mainWindow, bg="green", height = 150)
     bottomFrame.pack(side="bottom", fill="x")

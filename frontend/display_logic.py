@@ -5,6 +5,20 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 canvas_widget = None
 
+FLAG_PATHS = {
+    'USA' : 'img/us-flag.gif',
+    'UK' : 'img/uk-flag.gif',
+    'India' : 'img/india-flag.gif',
+    'Australia' : 'img/australia-flag.gif',
+    'Canada' : 'img/canada-flag.gif'
+}
+
+SENTIMENT_PATHS = {
+    'POS' : 'img/positive-sentiment.gif',
+    'NEU' : 'img/neutral-sentiment.gif',
+    'NEG' : 'img/negative-sentiment.gif'
+}
+
 def clear_frame(frame):
     """Remove all children from a frame."""
     for w in frame.winfo_children():
@@ -27,6 +41,14 @@ def update_geography(frames, geo_text_or_post):
             text = geo_text_or_post
         lbl = frames["labels"]["geography"]
         lbl.config(text=f"Location: {_safe_text(text)}")
+
+        if text in FLAG_PATHS:
+            flag_photo = tk.PhotoImage(file=FLAG_PATHS[text])
+            flag_photo = flag_photo.subsample(8, 8)
+            lbl.config(image=flag_photo, compound='left')
+            lbl.image = flag_photo 
+        else:
+            lbl.config(image='')
     except Exception as e:
         print("[display_logic.update_geography] Error:", e)
 
@@ -97,6 +119,14 @@ def update_sentiment(frames, sentiment_text_or_post):
             sentiment_text = sentiment_text_or_post
         lbl = frames["labels"]["sentiment"]
         lbl.config(text=f"Sentiment: {_safe_text(sentiment_text)}")
+
+        if sentiment_text in SENTIMENT_PATHS:
+            sentiment_photo = tk.PhotoImage(file=SENTIMENT_PATHS[sentiment_text])
+            sentiment_photo = sentiment_photo.subsample(6, 6)
+            lbl.config(image=sentiment_photo, compound='left')
+            lbl.image = sentiment_photo 
+        else:
+            lbl.config(image='') 
     except Exception as e:
         print("[display_logic.update_sentiment] Error:", e)
 
