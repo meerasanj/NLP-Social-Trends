@@ -44,7 +44,6 @@ def update_geography(frames, geo_text_or_post):
 
         if text in FLAG_PATHS:
             flag_photo = tk.PhotoImage(file=FLAG_PATHS[text])
-            flag_photo = flag_photo.subsample(8, 8)
             lbl.config(image=flag_photo, compound='left')
             lbl.image = flag_photo 
         else:
@@ -122,7 +121,6 @@ def update_sentiment(frames, sentiment_text_or_post):
 
         if sentiment_text in SENTIMENT_PATHS:
             sentiment_photo = tk.PhotoImage(file=SENTIMENT_PATHS[sentiment_text])
-            sentiment_photo = sentiment_photo.subsample(6, 6)
             lbl.config(image=sentiment_photo, compound='left')
             lbl.image = sentiment_photo 
         else:
