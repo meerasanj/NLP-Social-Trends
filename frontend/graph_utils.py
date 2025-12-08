@@ -27,7 +27,7 @@ from matplotlib.figure import Figure
 #Logic that will be used in the main gui
 def postnumByLoc(): # Base graph that is shown on app launch
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Post_Number']
     yIn = df['Location']
 
@@ -48,7 +48,7 @@ def postnumByLoc(): # Base graph that is shown on app launch
 
 def sentByLikes():
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Sentiment']
     yIn = df['Likes']
 
@@ -68,7 +68,7 @@ def sentByLikes():
 
 def sentByPostNum():
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Sentiment']
     yIn = df['Post_Number']
 
@@ -88,7 +88,7 @@ def sentByPostNum():
 
 def platformByLikes():
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Platform']
     yIn = df['Likes']
     
