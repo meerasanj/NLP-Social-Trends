@@ -2,8 +2,22 @@
 import tkinter as tk
 import graph_utils
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# Imports for dynamic image resizing
+from PIL import Image, ImageTk 
+import math
 
 canvas_widget = None
+# Global variables for the resizable phone screen image
+phone_screen_original_img = None # Stores the original Pillow Image object
+phone_screen_tk_img = None       # Stores the currently resized Tkinter ImageTk object
+
+# Helper class to mock a Tkinter Event for manual triggering (Fixes 'Event() takes no arguments')
+class MockResizeEvent:
+    """A minimal object to pass necessary attributes (widget, width, height) to a resize handler."""
+    def __init__(self, widget, width, height):
+        self.widget = widget
+        self.width = width
+        self.height = height
 
 FLAG_PATHS = {
     'USA' : 'img/us-flag.gif',
@@ -23,6 +37,69 @@ def clear_frame(frame):
     """Remove all children from a frame."""
     for w in frame.winfo_children():
         w.destroy()
+
+def init_display_logic(root_window):
+    """Initializes global resources, loading the original phone screen image using Pillow."""
+    global phone_screen_original_img
+    try:
+        # Load the image using Pillow (Image.open)
+        phone_screen_original_img = Image.open('img/phonescreen.png')
+        print("[display_logic] phonescreen.png loaded successfully by PIL.")
+    except Exception as e:
+        print(f"[display_logic] Error loading phonescreen.png with PIL: {e}")
+        phone_screen_original_img = None
+
+def _on_middle_resize(event):
+    """
+    Event handler bound to the middle frame to resize the phone screen image 
+    whenever the frame changes size.
+    """
+    global phone_screen_original_img, phone_screen_tk_img
+    
+    if not phone_screen_original_img:
+        return
+
+    frame_width = event.width
+    frame_height = event.height
+    
+    # Check for valid dimensions
+    if frame_width <= 0 or frame_height <= 0:
+        return
+
+    # Calculate the new size while maintaining aspect ratio
+    original_width, original_height = phone_screen_original_img.size
+    
+    # Calculate scale factor for fitting inside the frame
+    ratio_w = frame_width / original_width
+    ratio_h = frame_height / original_height
+    
+    # Choose the smaller ratio to ensure the image fits entirely within the frame
+    ratio = min(ratio_w, ratio_h)
+    
+    # Apply a slight padding/margin (e.g., 95% of the calculated size)
+    margin_factor = 0.95
+    new_width = int(original_width * ratio * margin_factor)
+    new_height = int(original_height * ratio * margin_factor)
+
+    if new_width <= 0 or new_height <= 0:
+        return # Avoid errors with zero-sized results
+
+    # Resize the image using Pillow
+    # Image.Resampling.LANCZOS is a high-quality resampling filter
+    resized_img = phone_screen_original_img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    
+    # Create the Tkinter compatible PhotoImage
+    phone_screen_tk_img = ImageTk.PhotoImage(resized_img)
+    
+    # Find the label currently holding the image and update it
+    middle_frame = event.widget
+    
+    # Use winfo_children()[0] to safely find the label created in update_middle
+    if middle_frame.winfo_children():
+        image_label = middle_frame.winfo_children()[0]
+        image_label.config(image=phone_screen_tk_img)
+        # Keep the necessary Tkinter reference on the label
+        image_label.image = phone_screen_tk_img 
 
 def _safe_text(value):
     if value is None:
@@ -86,14 +163,19 @@ def update_description(frames, platform_or_post, count_text=None):
 
 def update_middle(frames, content):
     """
-    Center panel: if text provided, show it; otherwise render the scatter_plot figure.
+    Center panel: if callable content (graph function) is provided, show it; 
+    otherwise, show the phone screen image with dynamic resizing.
     """
     global canvas_widget
+    middle_frame = frames["middleTopFrame"]
+    
+    # 1. Always unbind any previous resize handler when updating the content
+    middle_frame.unbind('<Configure>')
+    clear_frame(middle_frame)
+    
     try:
-        middle_frame = frames["middleTopFrame"]
-        clear_frame(middle_frame)
-        
         if callable(content):
+            # Graph Logic
             fig = content()
             canvas = FigureCanvasTkAgg(fig, master=middle_frame)
             canvas_widget = canvas.get_tk_widget()
@@ -101,11 +183,39 @@ def update_middle(frames, content):
             canvas.draw()
 
         else:
-            lbl = tk.Label(middle_frame, text=str(content), bg=middle_frame.cget("bg"), font=("Arial",16))
-            lbl.pack(expand=True)
+            # Phone Screen Image Logic (when navigating posts)
+            if phone_screen_original_img:
+                
+                # 2. Create the label placeholder
+                lbl = tk.Label(middle_frame, bg=middle_frame.cget("bg"))
+                lbl.pack(expand=True)
+                
+                # 3. Bind the resize function to the frame
+                middle_frame.bind('<Configure>', _on_middle_resize)
+                
+                # 4. Manually trigger the resize function once to draw the image on first load
+                # Ensure geometry manager has calculated initial size
+                middle_frame.update_idletasks() 
+                
+                # Create and call with the MockResizeEvent to pass required size attributes
+                mock_event = MockResizeEvent(
+                    middle_frame, 
+                    middle_frame.winfo_width(), 
+                    middle_frame.winfo_height()
+                )
+                
+                _on_middle_resize(mock_event)
+                
+            else:
+                # Fallback to displaying text content if image failed to load
+                lbl = tk.Label(middle_frame, text=str(content), bg=middle_frame.cget("bg"), font=("Arial",16))
+                lbl.pack(expand=True)
 
     except Exception as e:
-        print("[display_logic.update_middle] Error:", e)
+        # Note: If the error 'Event() takes no arguments' occurs here, 
+        # it means the MockResizeEvent class was not defined correctly or Tkinter version 
+        # is older. The current solution should fix the one you saw previously.
+        print(f"[display_logic.update_middle] Error: {e}")
 
 def update_sentiment(frames, sentiment_text_or_post):
     """
