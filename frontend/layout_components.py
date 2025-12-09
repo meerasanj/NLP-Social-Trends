@@ -70,21 +70,24 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     # Frame below sentiment, allows filtering of graph
     filterFrame = tk.Frame(rightTopFrame, bg="#DC97A5")
     filterFrame.pack(side="top", fill="both")
-    filterFrame.pack_propagate(False)
 
-    filter_label = tk.Label(filterFrame, text="Graph Filters", bg="orange")
-    filter_label.pack(side="top", pady=5)
-
+    filter_label = tk.Label(filterFrame, text="Graph Filters", bg="#DC97A5", font=("Georgia", 16, "bold"))    
+    filter_label.pack(side="top", pady=10, fill="x")
     filter_btns = {}
 
     btn_labels = ["Sentiment by Likes", "Sentiment by Post Number", " Platform by Likes", "Return to Base Graph"]
 
     for i, label_text in enumerate(btn_labels):
         # Create the button
-        btn = tk.Button(filterFrame, text=label_text)
+        btn = tk.Button(filterFrame, text=label_text, 
+                       bg="#D4C5AE", fg="#FF1493", 
+                       font=("Georgia", 16),
+                       bd=3, relief="groove",
+                       highlightbackground="#55768E", highlightthickness=3,
+                       height=2)
         
         # side="top" stacks them vertically. fill="x" makes them stretch horizontally.
-        btn.pack(side="top", fill="x", padx=10, pady=5)
+        btn.pack(fill="x", padx=10, pady = 47, expand=True)
         
         # Save to our dict with keys like "btn1", "btn2", etc.
         filter_btns[f"btn{i+1}"] = btn
@@ -100,7 +103,6 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     desc_label = _add_label(descFrame, "TODO: Platform / Description / Stats")
     middle_label = _add_label(middleTopFrame, "TODO: Phone / Graph / Query results")
     sentiment_label = _add_label(sentimentFrame, "TODO: Sentiment Image")
-    filter_label = _add_label(filterFrame, "TODO: Filter / Controls")
 
     # Bottom buttons (laid out simply to match spec)
     button_frame = tk.Frame(bottomFrame, bg=bottomFrame.cget("bg"))

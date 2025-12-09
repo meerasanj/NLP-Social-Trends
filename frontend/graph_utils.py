@@ -27,7 +27,7 @@ from matplotlib.figure import Figure
 #Logic that will be used in the main gui
 def postnumByLoc(): # Base graph that is shown on app launch
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Post_Number']
     yIn = df['Location']
 
@@ -36,7 +36,7 @@ def postnumByLoc(): # Base graph that is shown on app launch
     ax = baseFig.add_subplot(111)
 
     # Outputting and customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Post Number')
     ax.set_ylabel('Location')
     ax.set_title('Posts by Location')
@@ -48,7 +48,7 @@ def postnumByLoc(): # Base graph that is shown on app launch
 
 def sentByLikes():
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Sentiment']
     yIn = df['Likes']
 
@@ -57,7 +57,7 @@ def sentByLikes():
     ax = sxlFig.add_subplot(111)
     
     # Outputting and customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Likes')
     ax.set_title('Sentiment by Likes')
@@ -68,7 +68,7 @@ def sentByLikes():
 
 def sentByPostNum():
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Sentiment']
     yIn = df['Post_Number']
 
@@ -77,7 +77,7 @@ def sentByPostNum():
     ax = sxpnFig.add_subplot(111)
 
     # Outputting and customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Post Number')
     ax.set_title('Sentiment by Posts')
@@ -88,7 +88,7 @@ def sentByPostNum():
 
 def platformByLikes():
     # Loading correct x and y data for graph
-    df = pd.read_csv('../data/LLM_data_final.csv')
+    df = pd.read_csv('data/LLM_data_final.csv')
     xIn = df['Platform']
     yIn = df['Likes']
     
@@ -97,7 +97,7 @@ def platformByLikes():
     ax = pxlFig.add_subplot(111)
 
     # Outputting adn customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Platform')
     ax.set_ylabel('Likes')
     ax.set_title('Platform by Likes')

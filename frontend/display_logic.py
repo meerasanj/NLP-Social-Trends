@@ -84,14 +84,14 @@ def update_description(frames, platform_or_post, count_text=None):
         # Platform name (bold)
         platform_label = tk.Label(top_section, text=platform.upper(), 
                                   font=("Georgia", 14, "bold"), 
-                                  fg="#71557A", bg="#D4C5AE")
+                                  fg="#B83556", bg="#D4C5AE")
         platform_label.pack(pady=(10, 5))
         
         # Stats line with heart and retweet symbols
         stats_text = f"❤ {_safe_text(likes)} likes  ↻ {_safe_text(retweets)} retweets"
         stats_label = tk.Label(top_section, text=stats_text,
                               font=("Georgia", 12),
-                              fg="#71557A", bg="#D4C5AE")
+                              fg="#B83556", bg="#D4C5AE")
         stats_label.pack(pady=(0, 10))
         
         # Create bottom subsection for post text
@@ -100,7 +100,7 @@ def update_description(frames, platform_or_post, count_text=None):
         
         # Post text
         txt = tk.Text(bottom_section, wrap="word", font=("Georgia", 16), 
-                     fg="#71557A", bg="#D4C5AE", bd=0)
+                     fg="#B83556", bg="#D4C5AE", bd=0)
         txt.insert("1.0", text)
         txt.config(state="disabled")
         txt.pack(fill="both", expand=True, padx=10, pady=10)
