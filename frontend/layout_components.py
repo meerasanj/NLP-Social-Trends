@@ -55,7 +55,7 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     descFrame.pack(side="top", fill="both", expand=True)
 
     # Will hold the graph and query results from model
-    middleTopFrame = tk.Frame(topFrame, bg="yellow", height = 350, width = 200)
+    middleTopFrame = tk.Frame(topFrame, bg="#71557A", height = 350, width = 200)
     middleTopFrame.pack(side="left", fill = "both", expand=True)
 
     # Top right frame, holds other frames (not visible)
