@@ -70,10 +70,9 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     # Frame below sentiment, allows filtering of graph
     filterFrame = tk.Frame(rightTopFrame, bg="#DC97A5")
     filterFrame.pack(side="top", fill="both")
-    filterFrame.pack_propagate(False)
 
     filter_label = tk.Label(filterFrame, text="Graph Filters", bg="orange")
-    filter_label.pack(side="top", pady=5)
+    filter_label.pack(side="top", pady=10, fill="x")
 
     filter_btns = {}
 
@@ -81,7 +80,7 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
 
     for i, label_text in enumerate(btn_labels):
         # Create the button
-        btn = tk.Button(filterFrame, text=label_text)
+        btn = tk.Button(filterFrame, text=label_text, font=("Georgia", 10))
         
         # side="top" stacks them vertically. fill="x" makes them stretch horizontally.
         btn.pack(side="top", fill="x", padx=10, pady=5)
