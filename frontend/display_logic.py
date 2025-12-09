@@ -1,5 +1,6 @@
 # display_logic.py
 import tkinter as tk
+from tkinter import font
 import graph_utils
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -40,8 +41,7 @@ def update_geography(frames, geo_text_or_post):
         else:
             text = geo_text_or_post
         lbl = frames["labels"]["geography"]
-        lbl.config(text=f"Location: {_safe_text(text)}")
-
+        lbl.config(text=f"Location: {_safe_text(text)}", font=("Georgia", 12), fg="#71557A")
         if text in FLAG_PATHS:
             flag_photo = tk.PhotoImage(file=FLAG_PATHS[text])
             lbl.config(image=flag_photo, compound='left')
@@ -65,21 +65,47 @@ def update_description(frames, platform_or_post, count_text=None):
             likes = post.get('Likes', '')
             retweets = post.get('Retweets', '')
             text = post.get('text') or post.get('post_text') or ''
-            desc = f"Platform: {_safe_text(platform)}\nLikes: {_safe_text(likes)}  Retweets: {_safe_text(retweets)}\n\n{text}"
         else:
             platform = platform_or_post or ''
-            extra = count_text or ''
-            desc = f"Platform: {_safe_text(platform)}\n{_safe_text(extra)}"
-        lbl = frames["labels"]["description"]
-        # If it's a long text, replace label with Text widget for readability
-        parent = lbl.master
-        # Destroy the old label widget and create a Text if text is long
-        lbl.destroy()
-        txt = tk.Text(parent, wrap="word", height=8)
-        txt.insert("1.0", desc)
-        txt.config(state="disabled", bg=parent.cget("bg"), bd=0)
-        txt.pack(fill="both", expand=True, padx=8, pady=8)
-        # store reference so other code can still access frames["labels"]["description"]
+            likes = ''
+            retweets = ''
+            text = count_text or ''
+        
+        # Get the description frame (the parent container)
+        parent = frames["descFrame"]
+        
+        # Clear all widgets in the description frame
+        clear_frame(parent)
+        
+        # Create top subsection for Platform/Likes/Retweets
+        top_section = tk.Frame(parent, bg="#D4C5AE", bd=2, relief="groove")
+        top_section.pack(fill="x", padx=20, pady=(20, 10))
+        
+        # Platform name (bold)
+        platform_label = tk.Label(top_section, text=platform.upper(), 
+                                  font=("Georgia", 14, "bold"), 
+                                  fg="#71557A", bg="#D4C5AE")
+        platform_label.pack(pady=(10, 5))
+        
+        # Stats line with heart and retweet symbols
+        stats_text = f"❤ {_safe_text(likes)} likes  ↻ {_safe_text(retweets)} retweets"
+        stats_label = tk.Label(top_section, text=stats_text,
+                              font=("Georgia", 12),
+                              fg="#71557A", bg="#D4C5AE")
+        stats_label.pack(pady=(0, 10))
+        
+        # Create bottom subsection for post text
+        bottom_section = tk.Frame(parent, bg="#D4C5AE", bd=2, relief="groove")
+        bottom_section.pack(fill="both", expand=True, padx=20, pady=(10, 20))
+        
+        # Post text
+        txt = tk.Text(bottom_section, wrap="word", font=("Georgia", 16), 
+                     fg="#71557A", bg="#D4C5AE", bd=0)
+        txt.insert("1.0", text)
+        txt.config(state="disabled")
+        txt.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        # Store reference
         frames["labels"]["description"] = txt
     except Exception as e:
         print("[display_logic.update_description] Error:", e)
@@ -117,7 +143,7 @@ def update_sentiment(frames, sentiment_text_or_post):
         else:
             sentiment_text = sentiment_text_or_post
         lbl = frames["labels"]["sentiment"]
-        lbl.config(text=f"Sentiment: {_safe_text(sentiment_text)}")
+        lbl.config(text=f"Sentiment: {_safe_text(sentiment_text)}", font=("Georgia", 12), fg="#71557A")
 
         if sentiment_text in SENTIMENT_PATHS:
             sentiment_photo = tk.PhotoImage(file=SENTIMENT_PATHS[sentiment_text])

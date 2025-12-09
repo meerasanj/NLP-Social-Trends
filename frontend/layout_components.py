@@ -1,5 +1,6 @@
 # GUI import
 import tkinter as tk
+from tkinter import font
 
 #Omar
 def build_layout(window_title="Placeholder Title", geometry="750x500"):
@@ -7,50 +8,69 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
     Minimal wrapper around the existing layout.
     Returns (root, frames) so other modules can import without starting mainloop.
     """
+
     # Creates the GUI window
     mainWindow = tk.Tk()
     mainWindow.title("Placeholder Title")
-    mainWindow.geometry("750x500")
 
+    # Initializes the font variable
+    georgia = font.Font(family="Georgia", size=14, weight="normal")
+
+    # Cross-platform approach: set geometry after window initialization 
+    mainWindow.withdraw()
+    mainWindow.update_idletasks()
+
+    # Get screen dimensions
+    screen_width = mainWindow.winfo_screenwidth()
+    screen_height = mainWindow.winfo_screenheight()
+
+    # Set window to full screen size
+    mainWindow.geometry(f"{screen_width}x{screen_height}+0+0")
+    mainWindow.resizable(False, False)
+    mainWindow.deiconify()
     # Add 'icon' to app
     icon = tk.PhotoImage(file='img/app-icon.gif')
     mainWindow.iconphoto(True, icon)
 
     # Bottom frame for the index buttons
-    bottomFrame = tk.Frame(mainWindow, bg="green", height = 150)
+    bottomFrame = tk.Frame(mainWindow, bg="#55768C", height = 150)
     bottomFrame.pack(side="bottom", fill="x")
+    bottomFrame.pack_propagate(False)
 
     # Top frame, holds other frames (not visible)
     topFrame = tk.Frame(mainWindow, bg="lightblue")
     topFrame.pack(side="top", fill="both", expand=True)
 
     # Top left frame, holds other frames (not visible)
-    leftTopFrame = tk.Frame(topFrame, bg="red", height = 350, width = 225)
+    leftTopFrame = tk.Frame(topFrame, bg="white", height = 350)
     leftTopFrame.pack(side="left", fill = "both", expand=True)
+    leftTopFrame.pack_propagate(False)
 
     # Topmost left frame, will display geographic location of the post
-    geographyFrame = tk.Frame(leftTopFrame, bg="lightgreen", height=150, width = 225)
+    geographyFrame = tk.Frame(leftTopFrame, bg="#D4C5AE", height=150)
     geographyFrame.pack(side="top", fill="both")
 
     # Frame below geography, will display description and stats for the post
-    descFrame = tk.Frame(leftTopFrame, bg="purple")
+    descFrame = tk.Frame(leftTopFrame, bg="#DC97A5")
     descFrame.pack(side="top", fill="both", expand=True)
 
     # Will hold the graph and query results from model
-    middleTopFrame = tk.Frame(topFrame, bg="yellow", height = 350, width = 350)
+    middleTopFrame = tk.Frame(topFrame, bg="yellow", height = 350, width = 200)
     middleTopFrame.pack(side="left", fill = "both", expand=True)
 
     # Top right frame, holds other frames (not visible)
-    rightTopFrame = tk.Frame(topFrame, bg="pink", height = 350, width = 200)
+    rightTopFrame = tk.Frame(topFrame, bg="pink", height = 350)
     rightTopFrame.pack(side="left", fill = "both", expand=True)
+    rightTopFrame.pack_propagate(False)
 
     # Top right most frame, shows sentiment image for post
-    sentimentFrame = tk.Frame(rightTopFrame, bg="teal", height=150, width = 200)
+    sentimentFrame = tk.Frame(rightTopFrame, bg="#D4C5AE", height=150)
     sentimentFrame.pack(side="top", fill="both")
 
     # Frame below sentiment, allows filtering of graph
-    filterFrame = tk.Frame(rightTopFrame, bg="orange")
-    filterFrame.pack(side="top", fill="both", expand=True)
+    filterFrame = tk.Frame(rightTopFrame, bg="#DC97A5")
+    filterFrame.pack(side="top", fill="both")
+    filterFrame.pack_propagate(False)
 
     filter_label = tk.Label(filterFrame, text="Graph Filters", bg="orange")
     filter_label.pack(side="top", pady=5)
@@ -84,11 +104,15 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
 
     # Bottom buttons (laid out simply to match spec)
     button_frame = tk.Frame(bottomFrame, bg=bottomFrame.cget("bg"))
-    button_frame.pack(expand=True)
+    button_frame.pack(side="top", pady=20, fill="x")
 
-    btn_back = tk.Button(button_frame, text="<-- Back")
-    btn_select = tk.Button(button_frame, text="Select Post #")
-    btn_next = tk.Button(button_frame, text="Next -->")
+    button_frame.columnconfigure(0, weight=1)
+    button_frame.columnconfigure(1, weight=1)
+    button_frame.columnconfigure(2, weight=1)
+
+    btn_back = tk.Button(button_frame, text="<--   Back", width=12, height=2, font=("Georgia", 11), highlightbackground="#DC97A5", fg="#71557A")
+    btn_select = tk.Button(button_frame, text="Select Post #", width=15, height=2, font=("Georgia", 11), highlightbackground="#DC97A5", fg="#71557A")
+    btn_next = tk.Button(button_frame, text="Next   -->", width=12, height=2, font=("Georgia", 11), highlightbackground="#DC97A5", fg="#71557A")
     btn_back.grid(row=0, column=0, padx=8, pady=8)
     btn_select.grid(row=0, column=1, padx=8, pady=8)
     btn_next.grid(row=0, column=2, padx=8, pady=8)
