@@ -36,7 +36,7 @@ def postnumByLoc(): # Base graph that is shown on app launch
     ax = baseFig.add_subplot(111)
 
     # Outputting and customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Post Number')
     ax.set_ylabel('Location')
     ax.set_title('Posts by Location')
@@ -57,7 +57,7 @@ def sentByLikes():
     ax = sxlFig.add_subplot(111)
     
     # Outputting and customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Likes')
     ax.set_title('Sentiment by Likes')
@@ -77,7 +77,7 @@ def sentByPostNum():
     ax = sxpnFig.add_subplot(111)
 
     # Outputting and customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Sentiment')
     ax.set_ylabel('Post Number')
     ax.set_title('Sentiment by Posts')
@@ -97,7 +97,7 @@ def platformByLikes():
     ax = pxlFig.add_subplot(111)
 
     # Outputting adn customizing graph
-    ax.scatter(xIn,yIn, color = "darkorange")
+    ax.scatter(xIn,yIn, color = "#B83556")
     ax.set_xlabel('Platform')
     ax.set_ylabel('Likes')
     ax.set_title('Platform by Likes')
