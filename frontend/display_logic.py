@@ -34,6 +34,7 @@ SENTIMENT_PATHS = {
     'NEG' : 'img/negative-sentiment.gif'
 }
 
+
 def clear_frame(frame):
     """Remove all children from a frame."""
     for w in frame.winfo_children():
@@ -44,7 +45,7 @@ def init_display_logic(root_window):
     global phone_screen_original_img
     try:
         # Load the image using Pillow (Image.open)
-        phone_screen_original_img = Image.open('img/phonescreen.png')
+        phone_screen_original_img = Image.open('img/phone-graphic.gif')
         print("[display_logic] phonescreen.png loaded successfully by PIL.")
     except Exception as e:
         print(f"[display_logic] Error loading phonescreen.png with PIL: {e}")
