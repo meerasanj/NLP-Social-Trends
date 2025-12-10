@@ -1,3 +1,4 @@
+# Purpose: Tests all navigation logic (Next, Back, Select) including wrap-around and validation boundary conditions.
 import os
 import sys
 import pandas as pd
