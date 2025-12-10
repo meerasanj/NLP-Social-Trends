@@ -27,7 +27,7 @@ def setup_navigator():
 # ----------------------------------------------------------------------
 # Navigation Logic Tests
 # ----------------------------------------------------------------------
-class TestJaimeNavigation:
+class TestNavigation:
     """Tests for Navigator class logic (Next/Back wrap-around and Select Post)."""
      
     def test_next_post_wrap_around(self, setup_navigator):
