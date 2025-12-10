@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import font
 
 #Omar
-def build_layout(window_title="Placeholder Title", geometry="750x500"):
+def build_layout(window_title="NLP-Social-Trends", geometry="750x500"):
     """
     Minimal wrapper around the existing layout.
     Returns (root, frames) so other modules can import without starting mainloop.
@@ -13,7 +13,7 @@ def build_layout(window_title="Placeholder Title", geometry="750x500"):
 
     # Creates the GUI window
     mainWindow = tk.Tk()
-    mainWindow.title("Placeholder Title")
+    mainWindow.title("NLP-Social-Trends")
 
     # Initializes the font variable
     georgia = font.Font(family="Georgia", size=14, weight="normal")
