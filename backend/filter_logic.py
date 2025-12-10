@@ -1,6 +1,10 @@
+# File purpose: provide reusable filtering helpers for GUI actions (filters panel)
+
 import pandas as pd
 from typing import Optional, List
 
+# Central entry point
+# Filter DataFrame by platform/country/likes/retweets/sentiment
 def filter_dataframe(
     df: pd.DataFrame, 
     platform: Optional[str] = None, 
@@ -9,12 +13,6 @@ def filter_dataframe(
     min_retweets: Optional[int] = None,
     sentiment: Optional[str] = None
 ) -> pd.DataFrame:
-    """
-    This function is the central entry point for all filtering actions from 
-    the GUI's lower-right panel.
-    
-    Column names are based on Meera's DataLoader output ('Location' for country).
-    """
     if df is None or df.empty:
         print("[FilterLogic] Warning: Cannot filter. Input DataFrame is empty.")
         return pd.DataFrame()
@@ -48,19 +46,18 @@ def filter_dataframe(
         
     return filtered_df
 
-# HELPER FUNCTIONS - simplified interface for Omar's main_gui.py.
+# Helper: filter by platform
 def filter_by_platform(df: pd.DataFrame, platform_name: str) -> pd.DataFrame:
-    " Filter by platform button."
     return filter_dataframe(df, platform=platform_name)
 
+# Helper: filter by country (Location)
 def filter_by_country(df: pd.DataFrame, country_name: str) -> pd.DataFrame:
-    " Filter by country' button (uses Location column)."
     return filter_dataframe(df, country=country_name)
 
+# Helper: filter by likes threshold
 def filter_by_likes(df: pd.DataFrame, min_likes: int) -> pd.DataFrame:
-    " Filter by likes' button."
     return filter_dataframe(df, min_likes=min_likes)
     
+# Helper: filter by sentiment value
 def filter_by_sentiment(df: pd.DataFrame, sentiment_value: str) -> pd.DataFrame:
-    "Helper for a specific sentiment filter."
     return filter_dataframe(df, sentiment=sentiment_value)

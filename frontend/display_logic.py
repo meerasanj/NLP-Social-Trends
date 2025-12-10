@@ -1,4 +1,4 @@
-# display_logic.py
+# GUI update helpers for geography/description/sentiment panels and center content.
 import tkinter as tk
 from tkinter import font
 import graph_utils
@@ -119,7 +119,7 @@ def update_geography(frames, geo_text_or_post):
         else:
             text = geo_text_or_post
         lbl = frames["labels"]["geography"]
-        lbl.config(text=f"Location: {_safe_text(text)}", font=("Georgia", 12), fg="#71557A")
+        lbl.config(text="", font=("Georgia", 12), fg="#71557A")
         if text in FLAG_PATHS:
             flag_photo = tk.PhotoImage(file=FLAG_PATHS[text])
             lbl.config(image=flag_photo, compound='left')
@@ -140,11 +140,13 @@ def update_description(frames, platform_or_post, count_text=None):
         if isinstance(platform_or_post, dict):
             post = platform_or_post
             platform = post.get('Platform', 'Unknown')
+            post_number = post.get('Post_Number', '')
             likes = post.get('Likes', '')
             retweets = post.get('Retweets', '')
             text = post.get('text') or post.get('post_text') or ''
         else:
             platform = platform_or_post or ''
+            post_number = ''
             likes = ''
             retweets = ''
             text = count_text or ''
@@ -165,6 +167,12 @@ def update_description(frames, platform_or_post, count_text=None):
                                   fg="#B83556", bg="#D4C5AE")
         platform_label.pack(pady=(10, 5))
         
+        # Post number
+        postnum_label = tk.Label(top_section, text=f"POST {_safe_text(post_number)}",
+                                 font=("Georgia", 12, "bold"),
+                                 fg="#71557A", bg="#D4C5AE")
+        postnum_label.pack(pady=(0, 5))
+        
         # Stats line with heart and retweet symbols
         stats_text = f"❤ {_safe_text(likes)} likes  ↻ {_safe_text(retweets)} retweets"
         stats_label = tk.Label(top_section, text=stats_text,
@@ -180,6 +188,8 @@ def update_description(frames, platform_or_post, count_text=None):
         txt = tk.Text(bottom_section, wrap="word", font=("Georgia", 16), 
                      fg="#B83556", bg="#D4C5AE", bd=0)
         txt.insert("1.0", text)
+        txt.tag_configure("center", justify="center")
+        txt.tag_add("center", "1.0", "end")
         txt.config(state="disabled")
         txt.pack(fill="both", expand=True, padx=10, pady=10)
         
@@ -254,7 +264,7 @@ def update_sentiment(frames, sentiment_text_or_post):
         else:
             sentiment_text = sentiment_text_or_post
         lbl = frames["labels"]["sentiment"]
-        lbl.config(text=f"Sentiment: {_safe_text(sentiment_text)}", font=("Georgia", 12), fg="#71557A")
+        lbl.config(text="", font=("Georgia", 12), fg="#71557A")
 
         if sentiment_text in SENTIMENT_PATHS:
             sentiment_photo = tk.PhotoImage(file=SENTIMENT_PATHS[sentiment_text])

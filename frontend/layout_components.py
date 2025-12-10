@@ -1,3 +1,5 @@
+# Define the static GUI layout and return root + frames for other modules.
+
 # GUI import
 import tkinter as tk
 from tkinter import font
