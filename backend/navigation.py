@@ -1,3 +1,5 @@
+# Manages the current index of the social media post being viewed
+
 from dataclasses import dataclass
 
 # (1-732 posts from the dataset)
@@ -6,49 +8,37 @@ MIN_POST_INDEX = 1
 
 @dataclass
 class Navigator:
-    """
-    Purpose: Allows GUI interaction without breaking core app.
-    Manages the current index of the social media post being viewed. 
-    """
-    # The current post index, initialized to the first post.
+    # Track current post index (1-based).
     current_index: int = MIN_POST_INDEX
     
+    # Reset to first post.
     def initialize(self) -> None:
-        # Initializes the navigator (resets the index to 1).
         self.current_index = MIN_POST_INDEX
         
+    # Move to next post with wrap-around.
     def next_post(self) -> int:
-        """
-        Implements next_post() logic  with wrap-around. 
-        If at 732, it loops back to 1. Otherwise, it increments.
-        """
         if self.current_index == MAX_POST_INDEX:
-            self.current_index = MIN_POST_INDEX  # Loop to 1
+            self.current_index = MIN_POST_INDEX
         else:
             self.current_index += 1
         return self.current_index
 
+    # Move to previous post with wrap-around.
     def prev_post(self) -> int:
-        """
-        Implements prev_post() logic with wrap-around. 
-        If at 1, it loops back to 732. Otherwise, it decrements.
-        """
         if self.current_index == MIN_POST_INDEX:
-            self.current_index = MAX_POST_INDEX  # Loop to 732
+            self.current_index = MAX_POST_INDEX
         else:
             self.current_index -= 1
         return self.current_index
 
+    # Jump to a specific post within bounds.
     def select_post(self, new_index: int) -> int:
-        """
-        Implements select_post logic. Jumps to an index if it's within 1-732.
-        """
         if MIN_POST_INDEX <= new_index <= MAX_POST_INDEX:
             self.current_index = new_index
         return self.current_index
     
+    # Get current index.
     def get_current_index(self) -> int:
-        """Helper method for verifying the index state."""
         return self.current_index
 
 
@@ -71,7 +61,7 @@ if __name__ == "__main__":
     print(f"Index before Prev (at 1): {nav.get_current_index()}")
     nav.prev_post()
     print(f"Index after Prev (Loop to 732): {nav.get_current_index()}")
-
+    
     # 3. Test Normal Navigation (10 -> 11)
     nav.select_post(10)
     nav.next_post()

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+# Run the Llama model over raw posts and emit model_output.csv.
 
 # In[1]:
 

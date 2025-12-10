@@ -1,3 +1,5 @@
+# Standalone GUI layout (not used by main app)
+
 # GUI import
 import tkinter as tk
 

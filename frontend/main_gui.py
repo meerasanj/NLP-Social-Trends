@@ -1,4 +1,5 @@
-# main_gui.py
+# Entry point to program to wire together layout, data loading, navigation,
+# display, and graphs for the GUI
 import sys
 import os
 
@@ -11,22 +12,6 @@ import graph_utils
 from backend.navigation import Navigator
 from backend.data_loader import DataLoader
 
-"""
-================================================================================
-DATA MAPPING GUIDE FOR OMAR (implemented)
-================================================================================
-
-Notes implemented in this file:
-- Navigator is 1-based (1..732). DataLoader.get_post_by_index expects 0-based.
-  We convert by doing: idx0 = nav.get_current_index() - 1
-- on_next_pressed, on_back_pressed, on_select_post implemented to:
-    * advance/retreat/select index via Navigator
-    * request post dict from DataLoader (0-based index)
-    * call display_logic.update_geography/update_description/update_sentiment
-- The GUI initializes by loading the first post if available.
-- Buttons from layout_components frames["buttons"] are wired to the handlers.
-"""
-
 def main():
     # Initialize navigation and data loading
     nav = Navigator()  # Manages current post index (1-based: 1-732)
@@ -34,14 +19,13 @@ def main():
     print("Data Loaded")
     
     # Create the GUI first (returns the root window and frames dict)
-    # This MUST happen before loading PhotoImage objects
     root, frames = build_layout(window_title="Omar GUI", geometry="900x600")
 
-    # Initialize display logic to load images *AFTER* the root window is created
+    # Initialize display logic to load images after the root window is created
     display_logic.init_display_logic(root) # Pass root for proper Tkinter context
 
+    # Helper function to display a post dictionary
     def _display_post_dict(post_dict):
-        """Helper: given a post dict (or None), update the three main panels and show the phone screen image in the middle."""
         if not post_dict:
             print("[main_gui] No post data to display.")
             return
@@ -55,16 +39,17 @@ def main():
         # Sentiment:
         display_logic.update_sentiment(frames, post_dict.get('Sentiment', 'Unknown'))
         
-        # **MODIFIED MIDDLE PANEL LOGIC:**
-        # Pass a non-callable value (the post number text) to display_logic.update_middle.
+        # **MIDDLE PANEL LOGIC:**
+        # Pass a non-callable value (the post number text) to display_logic.update_middle
         # This triggers the 'else' block in update_middle, which is now configured
-        # to display the 'phonescreen.png' image and trigger the resizing logic.
+        # to display the 'phonescreen.png' image and trigger the resizing logic
         try:
             middle_content = f"Post #{post_dict.get('Post_Number', 'N/A')}"
             display_logic.update_middle(frames, middle_content)
         except Exception as e:
             print(f"[main_gui] Error updating middle panel for post: {e}")
 
+    # Handler for back button
     def on_back_pressed():
         print("Back button pressed")
         new_index = nav.prev_post()
@@ -75,6 +60,7 @@ def main():
         else:
             print("[main_gui] No post at index", idx0)
 
+    # Handler for select button
     def on_select_post():
         print("Select button pressed")
         try:
@@ -93,6 +79,7 @@ def main():
         except Exception as e:
             print("[main_gui] Error in select dialog:", e)
 
+    # Handler for next button
     def on_next_pressed():
         print("Next button pressed")
         new_index = nav.next_post()
@@ -103,15 +90,19 @@ def main():
         else:
             print("[main_gui] No post at index", idx0)
 
+    # Handler for sentiment by likes button
     def sxlButton():
         display_logic.update_middle(frames, graph_utils.sentByLikes)
 
+    # Handler for sentiment by post number button
     def sxpnButton(): 
         display_logic.update_middle(frames, graph_utils.sentByPostNum)
 
+    # Handler for platform by likes button
     def pxlButton():
         display_logic.update_middle(frames, graph_utils.platformByLikes)
 
+    # Handler for base button
     def baseButton():
         display_logic.update_middle(frames, graph_utils.postnumByLoc)
 
@@ -130,7 +121,7 @@ def main():
     except Exception as e:
         print("[main_gui] Warning: could not wire buttons automatically:", e)
 
-    # (Optional) initialize some placeholder text via display_logic functions
+    # Initialize first post display on startup
     try:
         # Initialize first post display on startup
         first_idx0 = nav.get_current_index() - 1

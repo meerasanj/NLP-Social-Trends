@@ -1,10 +1,12 @@
+# File purpose: load CSV data for the app, clean it, and expose helpers to access posts.
+
 import pandas as pd
 import os
 import numpy as np
 
 # DataLoader class to load and manage the data
 class DataLoader:
-    # Initializes the loader.
+    # Initialize loader with a target filename and trigger load
     def __init__(self, filename='mock_data.csv'):
         # Get the backend folder
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,7 +18,7 @@ class DataLoader:
         self.df = None
         self.load_data()
 
-    # Loads the data from the CSV file and returns it as a Pandas DataFrame.
+    # Load the CSV and clean it
     def load_data(self):
         if os.path.exists(self.filepath):
             try:
@@ -43,7 +45,7 @@ class DataLoader:
             print(f"[DataLoader] File not found: {self.filepath}")
             self.df = pd.DataFrame()
     
-    # Cleans and normalizes the loaded data
+    # Clean and normalize the loaded data
     def _clean_data(self):
         if self.df is None or self.df.empty:
             return
@@ -90,7 +92,7 @@ class DataLoader:
             print(f"[DataLoader] Warning: Found NaN values after cleaning:")
             print(nan_counts[nan_counts > 0])
 
-    # Returns a dictionary of the post at the specific index.
+    # Get one post as a dict by 0-based index
     def get_post_by_index(self, index):
         if self.df is None or self.df.empty:
             return None
@@ -101,17 +103,17 @@ class DataLoader:
         else:
             return None
 
-    # Returns the entire DataFrame.
+    # Return the entire DataFrame
     def get_all_posts(self):
         return self.df
     
-    # Returns the total number of posts.
+    # Return total number of posts
     def get_total_count(self):
         return len(self.df) if self.df is not None else 0
 
 # Quick test - runs only if you run this script directly
 if __name__ == "__main__":
-    # Test with LLM_data.csv
+    # Test with LLM_data.csv (1-732 posts)
     loader = DataLoader('LLM_data.csv')
     print(f"Total posts: {loader.get_total_count()}")
     print("Test Post #0:", loader.get_post_by_index(0))
