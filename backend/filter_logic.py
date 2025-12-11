@@ -1,9 +1,9 @@
-# File purpose: provide reusable filtering helpers for GUI actions (filters panel)
+# Provide reusable filtering helpers for GUI actions (filters panel)
 
 import pandas as pd
 from typing import Optional, List
 
-# Central entry point
+# Central entry point for filtering logic
 # Filter DataFrame by platform/country/likes/retweets/sentiment
 def filter_dataframe(
     df: pd.DataFrame, 

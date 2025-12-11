@@ -39,10 +39,7 @@ def main():
         # Sentiment:
         display_logic.update_sentiment(frames, post_dict.get('Sentiment', 'Unknown'))
         
-        # **MIDDLE PANEL LOGIC:**
-        # Pass a non-callable value (the post number text) to display_logic.update_middle
-        # This triggers the 'else' block in update_middle, which is now configured
-        # to display the 'phonescreen.png' image and trigger the resizing logic
+        # Middle Panel Logic
         try:
             middle_content = f"Post #{post_dict.get('Post_Number', 'N/A')}"
             display_logic.update_middle(frames, middle_content)
@@ -123,20 +120,17 @@ def main():
 
     # Initialize first post display on startup
     try:
-        # Initialize first post display on startup
         first_idx0 = nav.get_current_index() - 1
         first_post = loader.get_post_by_index(first_idx0)
         if first_post:
-            # Displays first post's data and the phone screen image in the middle
             _display_post_dict(first_post) 
         else:
             print("[main_gui] No data available to initialize first post.")
     except Exception as e:
         print("[main_gui] Error initializing first post:", e)
 
-    # Show Graph Immediately (display_logic.update_middle will render scatter if None passed)
+    # Show Graph Immediately and overwrite the phone screen image
     try:
-        # Overwrite the phone screen image with the base graph on startup
         display_logic.update_middle(frames, graph_utils.postnumByLoc)
     except Exception:
         pass

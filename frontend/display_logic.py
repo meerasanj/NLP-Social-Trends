@@ -3,16 +3,17 @@ import tkinter as tk
 from tkinter import font
 import graph_utils
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-# Imports for dynamic image resizing
-from PIL import Image, ImageTk 
+from PIL import Image, ImageTk # for dynamic image resizing
 import math
 
 canvas_widget = None
-# Global variables for the resizable phone screen image
-phone_screen_original_img = None # Stores the original Pillow Image object
-phone_screen_tk_img = None       # Stores the currently resized Tkinter ImageTk object
 
-# Helper class to mock a Tkinter Event for manual triggering (Fixes 'Event() takes no arguments')
+# Global variables for the resizable phone screen image
+phone_screen_original_img = None # original Pillow Image object
+phone_screen_tk_img = None       # resized Tkinter ImageTk object
+
+# Helper class to mock a Tkinter Event for manual triggering 
+# Fixes 'Event() takes no arguments'
 class MockResizeEvent:
     """A minimal object to pass necessary attributes (widget, width, height) to a resize handler."""
     def __init__(self, widget, width, height):
@@ -35,13 +36,13 @@ SENTIMENT_PATHS = {
 }
 
 
+# Helper function to clear a frame
 def clear_frame(frame):
-    """Remove all children from a frame."""
     for w in frame.winfo_children():
         w.destroy()
 
+# Initializes global resources, loading the original phone screen image using PIL
 def init_display_logic(root_window):
-    """Initializes global resources, loading the original phone screen image using Pillow."""
     global phone_screen_original_img
     try:
         # Load the image using Pillow (Image.open)
@@ -51,11 +52,8 @@ def init_display_logic(root_window):
         print(f"[display_logic] Error loading phonescreen.png with PIL: {e}")
         phone_screen_original_img = None
 
+# Event handler bound to the middle frame to resize the phone screen image 
 def _on_middle_resize(event):
-    """
-    Event handler bound to the middle frame to resize the phone screen image 
-    whenever the frame changes size.
-    """
     global phone_screen_original_img, phone_screen_tk_img
     
     if not phone_screen_original_img:
@@ -78,7 +76,7 @@ def _on_middle_resize(event):
     # Choose the smaller ratio to ensure the image fits entirely within the frame
     ratio = min(ratio_w, ratio_h)
     
-    # Apply a slight padding/margin (e.g., 95% of the calculated size)
+    # Apply a slight padding/margin 
     margin_factor = 0.95
     new_width = int(original_width * ratio * margin_factor)
     new_height = int(original_height * ratio * margin_factor)
@@ -103,16 +101,14 @@ def _on_middle_resize(event):
         # Keep the necessary Tkinter reference on the label
         image_label.image = phone_screen_tk_img 
 
+# Helper function to safely convert None values to "N/A"
 def _safe_text(value):
     if value is None:
         return "N/A"
     return str(value)
 
+# Updates the geography label on the upper left frame
 def update_geography(frames, geo_text_or_post):
-    """
-    Updates the geography label on the upper left frame.
-    Accepts either a simple string (country) or a post dict/Series with 'Location'.
-    """
     try:
         if isinstance(geo_text_or_post, dict):
             text = geo_text_or_post.get('Location', 'Unknown')
@@ -129,13 +125,11 @@ def update_geography(frames, geo_text_or_post):
     except Exception as e:
         print("[display_logic.update_geography] Error:", e)
 
+# Updates the description label area
+# This function is flexible:
+# - If platform_or_post is a dict/Series, it extracts Platform, Likes, Retweets, and text.
+# - Else, platform_or_post is treated as the platform string and count_text as additional info.
 def update_description(frames, platform_or_post, count_text=None):
-    """
-    Updates the description label area.
-    This function is flexible:
-      - If platform_or_post is a dict/Series, it extracts Platform, Likes, Retweets, and text.
-      - Else, platform_or_post is treated as the platform string and count_text as additional info.
-    """
     try:
         if isinstance(platform_or_post, dict):
             post = platform_or_post
@@ -198,11 +192,10 @@ def update_description(frames, platform_or_post, count_text=None):
     except Exception as e:
         print("[display_logic.update_description] Error:", e)
 
+# Updates the center panel
+# If content is graph, show it.
+# Otherwise, show the phone screen image with dynamic resizing.
 def update_middle(frames, content):
-    """
-    Center panel: if callable content (graph function) is provided, show it; 
-    otherwise, show the phone screen image with dynamic resizing.
-    """
     global canvas_widget
     middle_frame = frames["middleTopFrame"]
     
@@ -230,8 +223,7 @@ def update_middle(frames, content):
                 # 3. Bind the resize function to the frame
                 middle_frame.bind('<Configure>', _on_middle_resize)
                 
-                # 4. Manually trigger the resize function once to draw the image on first load
-                # Ensure geometry manager has calculated initial size
+                # 4. Manually trigger the resize function 
                 middle_frame.update_idletasks() 
                 
                 # Create and call with the MockResizeEvent to pass required size attributes
@@ -249,15 +241,11 @@ def update_middle(frames, content):
                 lbl.pack(expand=True)
 
     except Exception as e:
-        # Note: If the error 'Event() takes no arguments' occurs here, 
-        # it means the MockResizeEvent class was not defined correctly or Tkinter version 
-        # is older. The current solution should fix the one you saw previously.
         print(f"[display_logic.update_middle] Error: {e}")
 
+# Updates sentiment area
+# Accepts a simple string or a post dict/Series.
 def update_sentiment(frames, sentiment_text_or_post):
-    """
-    Updates sentiment area. Accepts a simple string or a post dict/Series.
-    """
     try:
         if isinstance(sentiment_text_or_post, dict):
             sentiment_text = sentiment_text_or_post.get('Sentiment', 'Unknown')
@@ -275,10 +263,8 @@ def update_sentiment(frames, sentiment_text_or_post):
     except Exception as e:
         print("[display_logic.update_sentiment] Error:", e)
 
+# Wires the bottom buttons to callbacks if provided.
 def wire_buttons(frames, on_back=None, on_select=None, on_next=None):
-    """
-    Wires the bottom buttons to callbacks if provided.
-    """
     try:
         if on_back:
             frames["buttons"]["back"].config(command=on_back)

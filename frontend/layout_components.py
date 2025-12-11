@@ -4,13 +4,8 @@
 import tkinter as tk
 from tkinter import font
 
-#Omar
+# Minimal wrapper around the existing layout
 def build_layout(window_title="NLP-Social-Trends", geometry="750x500"):
-    """
-    Minimal wrapper around the existing layout.
-    Returns (root, frames) so other modules can import without starting mainloop.
-    """
-
     # Creates the GUI window
     mainWindow = tk.Tk()
     mainWindow.title("NLP-Social-Trends")
@@ -100,11 +95,11 @@ def build_layout(window_title="NLP-Social-Trends", geometry="750x500"):
         lbl.pack(expand=True, padx=8, pady=8)
         return lbl
 
-    #Omar2
-    geography_label = _add_label(geographyFrame, "TODO: Geography / Country")
-    desc_label = _add_label(descFrame, "TODO: Platform / Description / Stats")
-    middle_label = _add_label(middleTopFrame, "TODO: Phone / Graph / Query results")
-    sentiment_label = _add_label(sentimentFrame, "TODO: Sentiment Image")
+    # Add labels to the frames
+    geography_label = _add_label(geographyFrame, "Geography / Country")
+    desc_label = _add_label(descFrame, "Platform / Description / Stats")
+    middle_label = _add_label(middleTopFrame, "Phone / Graph / Query results")
+    sentiment_label = _add_label(sentimentFrame, "Sentiment Image")
 
     # Bottom buttons (laid out simply to match spec)
     button_frame = tk.Frame(bottomFrame, bg=bottomFrame.cget("bg"))
@@ -149,7 +144,7 @@ def build_layout(window_title="NLP-Social-Trends", geometry="750x500"):
 
     return mainWindow, frames
 
-# Keep behavior identical when Lili runs this file directly
+# Keep behavior identical when this file is run directly
 if __name__ == "__main__":
-    root, frames = build_layout(window_title="Placeholder Title", geometry="750x500")
+    root, frames = build_layout(window_title="NLP-Social-Trends", geometry="750x500")
     root.mainloop()

@@ -47,6 +47,7 @@ def main():
         print("Make sure 'raw_kaggle.csv' is inside the 'data' folder.")
         return
 
+    # Load the raw data and normalize the structure
     try:
         df = pd.read_csv(INPUT_FILENAME)
         print(f"Raw data loaded: {len(df)} rows.")

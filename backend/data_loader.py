@@ -1,4 +1,4 @@
-# File purpose: load CSV data for the app, clean it, and expose helpers to access posts.
+# Load CSV data for the app, clean it, and expose helpers to access posts
 
 import pandas as pd
 import os

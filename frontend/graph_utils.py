@@ -6,7 +6,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure 
 
-#First Part is Test for how matplotlib works
+#Test for how matplotlib works (ignore)
 
 #Load data for use
 #df = pd.read_csv('../data/LLM_data.csv')
@@ -26,7 +26,7 @@ from matplotlib.figure import Figure
 #Show Graph
 #plt.show()
 
-#Logic that will be used in the main gui
+# Method to create a scatter plot of post number by location
 def postnumByLoc(): # Base graph that is shown on app launch
     # Loading correct x and y data for graph
     df = pd.read_csv('data/LLM_data_final.csv')
@@ -48,6 +48,7 @@ def postnumByLoc(): # Base graph that is shown on app launch
     return baseFig
 
 
+# Method to create a scatter plot of sentiment by likes
 def sentByLikes():
     # Loading correct x and y data for graph
     df = pd.read_csv('data/LLM_data_final.csv')
@@ -68,6 +69,7 @@ def sentByLikes():
     return sxlFig
 
 
+# Method to create a scatter plot of sentiment by post number
 def sentByPostNum():
     # Loading correct x and y data for graph
     df = pd.read_csv('data/LLM_data_final.csv')
@@ -88,6 +90,7 @@ def sentByPostNum():
     return sxpnFig
 
 
+# Method to create a scatter plot of platform by likes
 def platformByLikes():
     # Loading correct x and y data for graph
     df = pd.read_csv('data/LLM_data_final.csv')
